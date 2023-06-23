@@ -7,7 +7,7 @@ interface CalendarProps {
   year: number;
   daysOfTheWeek: string[];
   children: ReactNode;
-  className: string;
+  className?: string;
 }
 
 const makeDaysOfWeekList = (daysOfWeek: string[]) => {
@@ -26,7 +26,7 @@ export default function Calendar({
   className: className,
 }: CalendarProps) {
   return (
-    <section className="bg-slate-100 p-6 rounded-lg shadow-md">
+    <section className="bg-slate-100 p-5 md:p-6 rounded-lg shadow-md">
       <header className="flex items-center justify-between">
         <h1 className="font-semibold text-4xl first-letter:capitalize">
           {month}
@@ -34,12 +34,18 @@ export default function Calendar({
         <span className="font-medium text-xl">{year}</span>
       </header>
 
-      <table className={`mt-3 w-full table-fixed border-collapse ${className}`}>
-        <thead>
-          <Row className="bg-gray-200">{makeDaysOfWeekList(daysOfTheWeek)}</Row>
-        </thead>
-        <tbody>{children}</tbody>
-      </table>
+      <div className="overflow-x-auto">
+        <table
+          className={`mt-3 w-full table-fixed border-collapse ${className}`}
+        >
+          <thead>
+            <Row className="bg-gray-200">
+              {makeDaysOfWeekList(daysOfTheWeek)}
+            </Row>
+          </thead>
+          <tbody>{children}</tbody>
+        </table>
+      </div>
     </section>
   );
 }
