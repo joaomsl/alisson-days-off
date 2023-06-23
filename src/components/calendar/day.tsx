@@ -11,8 +11,9 @@ export default function Day({ date }: DayProps) {
   }
 
   const isDayOff =
-    getWeek(date, { weekStartsOn: 0 }) % 2 === 0 &&
-    (isWednesday(date) || isThursday(date));
+    getWeek(date, { weekStartsOn: 1 }) % 2 === 0
+      ? isWednesday(date) || isThursday(date)
+      : !isWednesday(date) && !isThursday(date);
 
   const columnColor = isDayOff ? "bg-green-200" : "bg-amber-200";
 
