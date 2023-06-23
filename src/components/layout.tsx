@@ -6,8 +6,8 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <main className="grid place-items-center min-h-screen">
-      <div className="container">{children}</div>
+    <main className="flex items-center justify-center min-h-screen">
+      <div className="container max-sm:p-3">{children}</div>
     </main>
   );
 }

@@ -40,19 +40,19 @@ export default function App() {
         month={intlFormat(date, { month: "long" })}
         year={parseInt(intlFormat(date, { year: "numeric" }))}
         daysOfTheWeek={daysOfWeek}
-        className="min-h-[336px]"
+        className="min-h-[336px] min-w-[1044px]"
       >
         {makeWeeks(calendar, date)}
       </Calendar>
 
-      <footer className="mt-3 flex justify-end gap-3">
-        <Button onClick={() => setCurrentDate(sub(date, { months: 1 }))}>
-          <span>Voltar</span>
-          <ArrowBendDownLeft size={18} weight="bold" />
-        </Button>
+      <footer className="mt-3 flex flex-wrap justify-end gap-3">
         <Button onClick={() => setCurrentDate(new Date())}>
           <span>Resetar</span>
           <ArrowClockwise size={18} weight="bold" />
+        </Button>
+        <Button onClick={() => setCurrentDate(sub(date, { months: 1 }))}>
+          <span>Voltar</span>
+          <ArrowBendDownLeft size={18} weight="bold" />
         </Button>
         <Button onClick={() => setCurrentDate(add(date, { months: 1 }))}>
           <ArrowBendDownRight size={18} weight="bold" />
