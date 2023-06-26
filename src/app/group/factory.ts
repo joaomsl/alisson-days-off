@@ -1,4 +1,4 @@
-import { Group } from "./group";
+import Group from "./group";
 
 export default function makeGroup(
   id: number,

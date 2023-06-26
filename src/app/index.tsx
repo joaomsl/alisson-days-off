@@ -5,7 +5,7 @@ import Row from "../components/calendar/row";
 import Layout from "../components/layout";
 import CalendarJs from "calendar-js";
 import pt from "date-fns/locale/pt";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../components/button";
 import {
   ArrowBendDownLeft,
@@ -18,6 +18,7 @@ import { calendarWeeksToDate, daysOfWeek } from "./support/date";
 import { isDayOff } from "./group/support";
 import Group from "./group/group";
 import { Day as IDay } from "./support/date";
+import useHolidays from "../hooks/useHolidays";
 
 const groups = [
   makeGroup(0, "C/D", (date: Date) => isDayOff(date)),
@@ -27,6 +28,7 @@ const groups = [
 export default function App() {
   const [date, setCurrentDate] = useState(new Date());
   const [group, setCurrentGroup] = useState<Group>(groups[0]);
+  const holidays = useHolidays(date);
 
   const makeDays = (week: IDay[]) => {
     return week.map((day, index) => (
@@ -52,9 +54,9 @@ export default function App() {
     <Layout>
       <section className="bg-slate-100 p-5 md:p-6 rounded-lg shadow-md text-center">
         <header className="sm:flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center sm:justify-normal gap-2">
             <img
-              className="block w-8 mx-auto"
+              className="block w-8"
               src="/brand-icon.webp"
               alt="Logo da Skala"
             />
@@ -77,7 +79,7 @@ export default function App() {
           daysOfTheWeek={daysOfWeek}
           className="min-h-[336px] min-w-[1044px]"
         >
-          {makeWeeks(calendarWeeksToDate(calendar, date))}
+          {makeWeeks(calendarWeeksToDate(calendar, date, holidays))}
         </Calendar>
       </section>
 
