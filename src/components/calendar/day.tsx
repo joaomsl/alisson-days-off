@@ -1,13 +1,16 @@
 import { format } from "date-fns";
 import Column from "./column";
 import Group from "../../app/group/group";
+import { Day as IDay } from "../../app/support/date";
 
 interface DayProps {
-  date: Date | null;
+  day: IDay;
   group: Group;
 }
 
-export default function Day({ date, group }: DayProps) {
+export default function Day({ day, group }: DayProps) {
+  const date = day.date;
+
   if (!date) {
     return <Column className="bg-gray-200" />;
   }

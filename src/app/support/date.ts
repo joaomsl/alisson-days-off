@@ -6,11 +6,21 @@ export const daysOfWeek = [...Array(7).keys()].map((weekIndex) => {
   return dateFns.format(date, "iii", { locale: pt });
 });
 
+export interface Day {
+  date: Date | null;
+  isPayDay: boolean;
+}
+
 export function calendarWeeksToDate(
   weeks: number[][],
   dateReference: Date
-): (Date | null)[][] {
+): Day[][] {
   return weeks.map((week) =>
-    week.map((day) => (day > 0 ? dateFns.setDate(dateReference, day) : null))
+    week.map((day) => {
+      const date = day > 0 ? dateFns.setDate(dateReference, day) : null;
+      const isPayDay = true;
+
+      return { date, isPayDay };
+    })
   );
 }

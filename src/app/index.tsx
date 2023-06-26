@@ -17,6 +17,7 @@ import makeGroup from "./group/factory";
 import { calendarWeeksToDate, daysOfWeek } from "./support/date";
 import { isDayOff } from "./group/support";
 import Group from "./group/group";
+import { Day as IDay } from "./support/date";
 
 const groups = [
   makeGroup(0, "C/D", (date: Date) => isDayOff(date)),
@@ -27,16 +28,14 @@ export default function App() {
   const [date, setCurrentDate] = useState(new Date());
   const [group, setCurrentGroup] = useState<Group>(groups[0]);
 
-  const makeDays = (week: (Date | null)[]) => {
-    return week.map((date: Date | null, index: number) => (
-      <Day date={date} group={group} key={index} />
+  const makeDays = (week: IDay[]) => {
+    return week.map((day, index) => (
+      <Day day={day} group={group} key={index} />
     ));
   };
 
-  const makeWeeks = (weeks: (Date | null)[][]) => {
-    return weeks.map((week: (Date | null)[], index: number) => (
-      <Row key={index}>{makeDays(week)}</Row>
-    ));
+  const makeWeeks = (weeks: IDay[][]) => {
+    return weeks.map((week, index) => <Row key={index}>{makeDays(week)}</Row>);
   };
 
   const nextGroup = () => setCurrentGroup(groups[group.id + 1] ?? groups[0]);
