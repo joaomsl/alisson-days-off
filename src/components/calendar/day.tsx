@@ -17,7 +17,7 @@ export default function Day({ date }: DayProps) {
       ? isWednesday(date) || isThursday(date)
       : !isWednesday(date) && !isThursday(date);
 
-  const columnColor = isDayOff ? "bg-green-200" : "bg-amber-200";
+  const columnColor = isDayOff ? "bg-green-400" : "bg-amber-500/90";
 
   return (
     <Column className="aspect-square p-4 relative">
