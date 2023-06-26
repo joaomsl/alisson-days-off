@@ -1,4 +1,4 @@
-import { sub, setDate, add, format } from "date-fns";
+import * as dateFns from "date-fns";
 import Calendar from "../components/calendar";
 import Day from "../components/calendar/day";
 import Row from "../components/calendar/row";
@@ -13,23 +13,36 @@ import {
   ArrowClockwise,
   ArrowsDownUp,
 } from "@phosphor-icons/react";
+import makeGroup from "./group/factory";
+import { calendarWeeksToDate, daysOfWeek } from "./support/date";
+import { isDayOff } from "./group/support";
+import Group from "./group/group";
 
-function makeDays(days: number[], currentDate: Date) {
-  return days.map((day: number, index: number) => (
-    <Day date={day > 0 ? setDate(currentDate, day) : null} key={index} />
-  ));
-}
-
-function makeWeeks(weeks: number[][], currentDate: Date) {
-  return weeks.map((days: number[], index: number) => (
-    <Row key={index}>{makeDays(days, currentDate)}</Row>
-  ));
-}
-
-const daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+const groups = [
+  makeGroup(0, "C/D", (date: Date) => isDayOff(date)),
+  makeGroup(1, "A/B", (date: Date) => !isDayOff(date)),
+];
 
 export default function App() {
   const [date, setCurrentDate] = useState(new Date());
+  const [group, setCurrentGroup] = useState<Group>(groups[0]);
+
+  const makeDays = (week: (Date | null)[]) => {
+    return week.map((date: Date | null, index: number) => (
+      <Day date={date} group={group} key={index} />
+    ));
+  };
+
+  const makeWeeks = (weeks: (Date | null)[][]) => {
+    return weeks.map((week: (Date | null)[], index: number) => (
+      <Row key={index}>{makeDays(week)}</Row>
+    ));
+  };
+
+  const nextGroup = () => setCurrentGroup(groups[group.id + 1] ?? groups[0]);
+  const resetToCurrent = () => setCurrentDate(new Date());
+  const nextMonth = () => setCurrentDate(dateFns.add(date, { months: 1 }));
+  const previousMonth = () => setCurrentDate(dateFns.sub(date, { months: 1 }));
 
   const calendar = CalendarJs().of(
     date.getFullYear(),
@@ -40,13 +53,24 @@ export default function App() {
     <Layout>
       <section className="bg-slate-100 p-5 md:p-6 rounded-lg shadow-md text-center">
         <header className="sm:flex items-center justify-between">
-          <h1 className="font-semibold text-4xl tracking-tighter">Turma A/B</h1>
-          
+          <div className="flex items-center gap-2">
+            <img
+              className="block w-8 mx-auto"
+              src="/brand-icon.webp"
+              alt="Logo da Skala"
+            />
+            <h1 className="font-semibold text-4xl tracking-tighter">
+              Turma {group.name}
+            </h1>
+          </div>
+
           <div className="flex justify-center items-center gap-3">
             <span className="font-medium text-xl sm:text-2xl first-letter:capitalize">
-              { format(date, 'MMMM', {locale: pt}) }
+              {dateFns.format(date, "MMMM", { locale: pt })}
             </span>
-            <span className="font-medium sm:font-semibold text-xl sm:bg-zinc-900 sm:text-slate-100 sm:px-4 sm:py-2 rounded-full">{ date.getFullYear() }</span>
+            <span className="font-medium sm:font-semibold text-xl sm:bg-zinc-900 sm:text-slate-100 sm:px-4 sm:py-2 rounded-full">
+              {date.getFullYear()}
+            </span>
           </div>
         </header>
 
@@ -54,27 +78,26 @@ export default function App() {
           daysOfTheWeek={daysOfWeek}
           className="min-h-[336px] min-w-[1044px]"
         >
-          {makeWeeks(calendar, date)}
+          {makeWeeks(calendarWeeksToDate(calendar, date))}
         </Calendar>
       </section>
 
-
       <footer className="mt-3 flex justify-end sm:justify-between gap-3">
-        <Button onClick={() => setCurrentDate(new Date())}>
+        <Button onClick={nextGroup}>
           <ArrowsDownUp size={18} weight="bold" />
           <span className="hidden sm:block">Trocar turma</span>
         </Button>
-        
+
         <div className="flex gap-3">
-          <Button onClick={() => setCurrentDate(new Date())}>
+          <Button onClick={resetToCurrent}>
             <ArrowClockwise size={18} weight="bold" />
             <span className="hidden sm:block">Resetar</span>
           </Button>
-          <Button onClick={() => setCurrentDate(sub(date, { months: 1 }))}>
+          <Button onClick={previousMonth}>
             <ArrowBendDownLeft size={18} weight="bold" />
             <span className="hidden sm:block">Voltar</span>
           </Button>
-          <Button onClick={() => setCurrentDate(add(date, { months: 1 }))}>
+          <Button onClick={nextMonth}>
             <ArrowBendDownRight size={18} weight="bold" />
             <span className="hidden sm:block">Próximo</span>
           </Button>
