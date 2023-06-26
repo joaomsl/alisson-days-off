@@ -10,8 +10,10 @@ export default function Day({ date }: DayProps) {
     return <Column className="bg-gray-200" />;
   }
 
+  let week = getWeek(date, { weekStartsOn: 1 }) + Math.min(1, date.getFullYear() - (new Date).getFullYear())
+
   const isDayOff =
-    getWeek(date, { weekStartsOn: 1 }) % 2 === 0
+    week % 2 === 0
       ? isWednesday(date) || isThursday(date)
       : !isWednesday(date) && !isThursday(date);
 
