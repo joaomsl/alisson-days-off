@@ -5,7 +5,7 @@ import Row from "../components/calendar/row";
 import Layout from "../components/layout";
 import CalendarJs from "calendar-js";
 import pt from "date-fns/locale/pt";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "../components/button";
 import {
   ArrowBendDownLeft,
