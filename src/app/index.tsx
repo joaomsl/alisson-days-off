@@ -21,13 +21,13 @@ import { Day as IDay } from "./support/date";
 import useHolidays from "../hooks/useHolidays";
 
 const groups = [
-  makeGroup(0, "C/D", (date: Date) => isDayOff(date)),
-  makeGroup(1, "A/B", (date: Date) => !isDayOff(date)),
+  makeGroup(0, "A/B", (date: Date) => isDayOff(date)),
+  makeGroup(1, "C/D", (date: Date) => !isDayOff(date)),
 ];
 
 export default function App() {
   const [date, setCurrentDate] = useState(new Date());
-  const [group, setCurrentGroup] = useState<Group>(groups[0]);
+  const [group, setCurrentGroup] = useState<Group>(groups[1]);
   const holidays = useHolidays(date);
 
   const makeDays = (week: IDay[]) => {
